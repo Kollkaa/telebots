@@ -28,6 +28,7 @@ import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
     String chatadmin="-361379869";
+    String chatadmin2="-365050746";
    boolean shutdown=false;
    boolean shut=false;
    boolean flag=false;
@@ -162,7 +163,7 @@ public class Bot extends TelegramLongPollingBot {
                             e.printStackTrace();
                         }
                         try {
-                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() + "\n" + user.getType_doc()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() + "\n" + user.getType_doc()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -714,7 +715,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Учеба в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Контакт консультатнта по учебе: @job_polandd ",333,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Учебе"+"@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Учебе"+ "@"+update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -722,8 +723,8 @@ public class Bot extends TelegramLongPollingBot {
 
                     case "Работа в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake("t.me/praca_polsha",333,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Работе"+"@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(send_Message_With_Remake("Выберете нужный пункт",23112000,update.getMessage().getChatId().toString()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -753,6 +754,21 @@ public class Bot extends TelegramLongPollingBot {
                         try {
                             sendApiMethod(send_Message_With_Remake("Контакт для сотрудничества: @frikok",333,update.getMessage().getChatId().toString()));
                             sendApiMethod(new SendMessage().setChatId("516538254").setText("ZAKAZ NA BOTA"+update.getMessage().getChat().getUserName()));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "Вакансии":
+                        try {
+                            sendApiMethod(send_Message_With_Remake("https://t.me/praca_polsha",333,update.getMessage().getChatId().toString()));
+
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "Связаться с Менеджером":
+                        try {
+                            sendApiMethod(send_Message_With_Remake("Менеджер по работе: @job_polandd",333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -1039,6 +1055,26 @@ public class Bot extends TelegramLongPollingBot {
 
 
         }
+        if(type == 23112000){
+            KeyboardRow row1=new KeyboardRow();
+            KeyboardRow row2=new KeyboardRow();
+            KeyboardRow row3=new KeyboardRow();
+            KeyboardRow row4=new KeyboardRow();
+
+            row1.add(new KeyboardButton("Вакансии"));
+            row2.add(new KeyboardButton("Связаться с Менеджером"));
+
+
+            row4.add(new KeyboardButton("Вернуться  в главное меню↩️"));
+            rows.add(row1);
+            rows.add(row2);
+            rows.add(row3);
+            rows.add(row4);
+
+
+
+        }
+
 
 
 
@@ -1054,11 +1090,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@Documents_in_Poland_bot";///"@warsaww_bot";
+        return "@warsaww_bot";///""@Documents_in_Poland_bot;
     }
 
     @Override
     public String getBotToken() {
-        return "808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo";//827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
+        return "827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo
     }
 }
