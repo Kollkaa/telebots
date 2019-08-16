@@ -545,7 +545,7 @@ public class Bot extends TelegramLongPollingBot {
                             execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов:\n" +
                                     "- фото паспорта\n" +
                                     "- место жительства в Варшаве\n" +
-                                    "- фото прав(две стороны)"));
+                                    "- фото прав(две стороны)"));//
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
