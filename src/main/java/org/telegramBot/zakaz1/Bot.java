@@ -262,28 +262,31 @@ public class Bot extends TelegramLongPollingBot {
                             e.printStackTrace();
                         }
                         break;
-                    case "Документы":
+                    case "\uD83D\uDCD1Документы":
                         user.setAdmin_support(false);
 
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
                                     "\n" +
-                                    "1️⃣ Приглашение ( Виза )\n" +
-                                    "2️⃣ Карта побыту рабочая\n" +
+                                    "1️⃣ Приглашение Воеводское ( Виза )\n" +
+                                    "2️⃣ Полугодовое приглашение\n" +
                                     "3️⃣ Комплект документов на карту побыту\n" +
-                                    "4️⃣ Мельдунок + песель \n" +
-                                    "5️⃣ Умовы найму\n" +
-                                    "6️⃣ Wstepne\n" +
-                                    "7️⃣ Cан-эпид книга \n" +
-                                    "8️⃣ Психотесты для водителей\n" +
-                                    "9️⃣ Orzeczenie для водителей\n" +
-                                    "\uD83D\uDD1F Код 95 \n" +
-                                    "1️⃣1️⃣ Получение банковского кредита\n" +
-                                    "1️⃣2️⃣ Выписка из банка\n" +
-                                    "1️⃣3️⃣ Страховка авто/человек\n" +
-                                    "1️⃣4️⃣ BHP \n" +
-                                    "1️⃣5️⃣ NIP/PIT\n" +
-                                    "1️⃣6️⃣ Справка о несудимости", 666, update.getMessage().getChatId().toString()));
+                                    "4️⃣ Карта побыту рабочая(с внеском)\n" +
+                                    "5️⃣ Карта побытку рабочая(без внеска)\n" +
+                                    "6️⃣ Мельдунок\n" +
+                                    "7️⃣ Умовы найму \n" +
+                                    "8️⃣ Wstepne\n" +
+                                    "9️⃣ Сан-эпид\n" +
+                                    "\uD83D\uDD1F Психотесты для водитилей \n" +
+                                    "1️⃣1️⃣ Orzeczenie для водителей\n" +
+                                    "1️⃣2️⃣ Код 95\n" +
+                                    "1️⃣3️⃣ Получение банковского кредита\n" +
+                                    "1️⃣4️⃣ Выписка из банка\n" +
+                                    "1️⃣5️⃣ Страховка авто/человек\n" +
+                                    "1️⃣6️⃣ Справка о несудимости\n"+
+                                    "1️⃣7️⃣ BNP\n"+
+                                    "1️⃣8️⃣ NIP/PIT\n"+
+                                    "1️⃣9️⃣ Виза в USA \uD83C\uDDFA\uD83C\uDDF8 | England \uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F | Australia \uD83C\uDDE6\uD83C\uDDFA",666, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -408,7 +411,7 @@ public class Bot extends TelegramLongPollingBot {
                             sendApiMethod(send_Message_With_Remake("Карта побыту рабочая / студенческая\n" +
                                     "любая страна + полный пакет документов (оплата внеска входит)\n" +
                                     "\n" +
-                                    "⏳Время ожидания 30-45 дней\n" +
+                                    "⏳Время ожидания 8-12 месяцев\n" +
                                     "\uD83D\uDCB5Цена: 2800 zl  ",33,update.getMessage().getChatId().toString()));
                             execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов: По индивидуальной записи\n"
                             ));
@@ -596,6 +599,69 @@ public class Bot extends TelegramLongPollingBot {
                             e.printStackTrace();
                         }
                         break;
+                    case "16":
+                        user.setType_doc(TypeDoc.type_1_1_15);
+                        try {
+
+                            sendApiMethod(send_Message_With_Remake("Страховка авто/человек"+"\n" +
+                                    "\n" +
+                                    "⏳Время ожидания 1 день\n" +
+                                    "\uD83D\uDCB5Цена: ндивидуально  " , 33,update.getMessage().getChatId().toString()));
+                            execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов:  По указанию менеджера" ));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "17":
+                        user.setType_doc(TypeDoc.type_1_1_15);
+
+                        try {
+                            execute(new SendPhoto().setPhoto(new File("src/main/resources/photos/photo_2019-09-17_16-27-50.jpg")).setChatId(update.getMessage().getChatId()));
+
+                            sendApiMethod(send_Message_With_Remake("BNP"+"\n" +
+                                    "\n" +
+                                    "⏳Время ожидания индивидуально\n" +
+                                    "\uD83D\uDCB5Цена: ндивидуально  " , 33,update.getMessage().getChatId().toString()));
+                            execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов:  По указанию менеджера" ));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() +   "Документ: BNP"));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "18":
+                        user.setType_doc(TypeDoc.type_1_1_15);
+                        try {
+
+                            sendApiMethod(send_Message_With_Remake("NIP/PIT"+"\n" +
+                                    "\n" +
+                                    "⏳Время ожидания Индивидуально\n" +
+                                    "\uD83D\uDCB5Цена: Индивидуально  " , 33,update.getMessage().getChatId().toString()));
+                            execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов:  По указанию менеджера" ));
+                            try {
+                                sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() +   "Документ: NIP/PIT"));
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "19":
+                        user.setType_doc(TypeDoc.type_1_1_15);
+                        try {
+
+                            sendApiMethod(send_Message_With_Remake("Виза в USA \uD83C\uDDFA\uD83C\uDDF8 | England \uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F | Australia \uD83C\uDDE6\uD83C\uDDFA" , 33,update.getMessage().getChatId().toString()));
+                            execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов:  По указанию менеджера" ));
+                            execute(new SendMessage().setChatId(chatadmin).setText("Заказ по Визе(Виза в USA \uD83C\uDDFA\uD83C\uDDF8 | England \uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F | Australia \uD83C\uDDE6\uD83C\uDDFA)от пользователя"+" @"+update.getMessage().getChat().getUserName()));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
                     case "К выбору докуметов" :
 
                         user.setAdmin_support(false);
@@ -715,7 +781,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Учеба в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Контакт консультатнта по учебе: @job_polandd ",333,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Учебе"+ "@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Учебе"+ '@'+update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -724,7 +790,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Работа в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете нужный пункт",23112000,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -769,6 +835,20 @@ public class Bot extends TelegramLongPollingBot {
                     case "Связаться с Менеджером":
                         try {
                             sendApiMethod(send_Message_With_Remake("Менеджер по работе: @job_polandd",333,update.getMessage().getChatId().toString()));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "Афиша Мероприятий ":
+                        try {
+                            sendApiMethod(send_Message_With_Remake("https://t.me/warszawweekend",333,update.getMessage().getChatId().toString()));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "Знакомства ":
+                        try {
+                            sendApiMethod(send_Message_With_Remake("https://t.me/warszawweekend",333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -834,7 +914,7 @@ public class Bot extends TelegramLongPollingBot {
             KeyboardRow row4=new KeyboardRow();
 
 
-            row1.add(new KeyboardButton("Документы"));
+            row1.add(new KeyboardButton("\uD83D\uDCD1Документы"));
             row2.add(new KeyboardButton("\uD83C\uDF10Хочу в Европу | Работа | Учёба"));
             row3.add(new KeyboardButton("🚸Навигатор Польша"));
             row4.add(new KeyboardButton("ℹ️ Сотрудничество | помощь"));
@@ -1007,17 +1087,25 @@ public class Bot extends TelegramLongPollingBot {
             KeyboardRow row4=new KeyboardRow();
             KeyboardRow row5=new KeyboardRow();
             KeyboardRow row6=new KeyboardRow();
+            KeyboardRow row7=new KeyboardRow();
+            KeyboardRow row8=new KeyboardRow();
             row1.add(new KeyboardButton("Обьявления"));
             row2.add(new KeyboardButton("Работа"));
             row3.add(new KeyboardButton("Рынок"));
             row4.add(new KeyboardButton("Жилье"));
-            row6.add(new KeyboardButton("Вернуться  в главное меню↩️"));
+
             row5.add(new KeyboardButton(" Каталог услуг | Варшава "));
+            row6.add(new KeyboardButton("Афиша Мероприятий "));
+            row7.add(new KeyboardButton("Знакомства "));
+            row8.add(new KeyboardButton("Вернуться  в главное меню↩️"));
             rows.add(row1);
             rows.add(row2);
             rows.add(row3);
             rows.add(row4);
             rows.add(row5);
+            rows.add(row6);
+            rows.add(row7);
+            rows.add(row8);
 
 
         }
