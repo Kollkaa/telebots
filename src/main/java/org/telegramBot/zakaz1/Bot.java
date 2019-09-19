@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -33,6 +34,7 @@ public class Bot extends TelegramLongPollingBot {
    boolean shut=false;
    boolean flag=false;
     Map<String,User> users=new HashMap<>();
+    List<String >rassilka=new ArrayList<>();
     List<String>listNickname=new ArrayList<>();
     User user;
     String support_id="516538254";//"314254027";
@@ -116,27 +118,6 @@ public class Bot extends TelegramLongPollingBot {
 
             if (update.getMessage().getText() != null) {
                 String pass=update.getMessage().getText();
-                if (("/admin"+pass).equals("/adminandrew")) {
-                    try {
-                        sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Привет, Андрей, это режим администратора..Для запуска пользовательського режима нажми /start"));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        sendApiMethod(send_Message_With_Remake("Доступные документы для просмотра информации:"+"\n"+" 1.Приглашение воеводское" + "\n" + "2.Полугодовое приглашение" + "\n" + "3.Комплект документов на карту побыту" + "\n" + "4.Карта побыту рабочая(с внеском)" + "\n" + "5.Карта побыту рабочая(без внеска)" + "\n" + "6.Мельдунок" + "\n" + "7.Умовы найму" + "\n" + "8.Wstepne" + "\n" + "9.Cан-эпид" + "\n" + "10.Психотесты для водителей" + "\n" + "11.Orzeczenie для водителей" + "\n" + "12.Код 95" + "\n" + "13.Получение банковского кредита" + "\n" + "14.Выписка из банка" + "\n" + "1.Страховка авто/человек" + "\n" + "Команды для управления ботом:" + "\n" + "/show - статистика посетителей "
-                                + "\n" + "/on - включить бота" + "\n" + "/off - выключить бота", 666, update.getMessage().getChatId().toString()));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else if (flag==true && ("/admin"+pass)!=("/adminandrew")){
-                    try {
-                        sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Неправильный ввод"));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-
-                }
 
                 switch (update.getMessage().getText())
                 ///dd
@@ -169,26 +150,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
 
-                    case "/admin":
-                        user.setAdmin(true);
-                        flag=true;
 
-
-                        try {
-                            sendApiMethod(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Введите пароль:"));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-
-
-//                        else {
-//                            try {
-//                                sendApiMethod(new SendMessage().setText("Некоректный ввод...").setChatId(update.getMessage().getChatId().toString()));
-//                            } catch (TelegramApiException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-                        break;
                     case "/show":
                         String res = "";
                         for (String s : listNickname) {
@@ -229,6 +191,28 @@ public class Bot extends TelegramLongPollingBot {
 
 
                     case "/start":
+                        if(update.getMessage().getChatId().toString().equals("516538254")) {
+                            try {
+                                execute(new SendMessage().setText("Привет, Администратор. Все заказы в группе.").setChatId(update.getMessage().getChatId()));
+                                System.out.println("Not Size");
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        else {
+                            for(String s:rassilka){
+                                if(s!=update.getMessage().getChatId().toString()){
+                                    rassilka.add(update.getMessage().getChatId().toString());
+                                    System.out.println("Complete");
+                                    System.out.println(rassilka.size());
+
+                                }
+                            }
+
+
+                        }
+
                         flag=false;
                         listNickname.add(update.getMessage().getChat().getUserName());
                         count += 1;
@@ -304,8 +288,27 @@ public class Bot extends TelegramLongPollingBot {
                         user.setAdmin_support(false);
 
                         try {
-                            sendApiMethod(send_Message_With_Remake("Доступные документы для просмотра информации:"+"\n"+"1.Приглашение воеводское" + "\n" + "2.Полугодовое приглашение" + "\n" + "3.Комплект документов на карту побыту" + "\n" + "4.Карта побыту рабочая(с внеском)" + "\n" + "5.Карта побыту рабочая(без внеска)" + "\n" + "6.Мельдунок" + "\n" + "7.Умовы найму" + "\n" + "8.Wstepne" + "\n" + "9.Cан-эпид" + "\n" + "10.Психотесты для водителей" + "\n" + "11.Orzeczenie для водителей" + "\n" + "12.Код 95" + "\n" + "13.Получение банковского кредита" + "\n" + "14.Выписка из банка" + "\n" + "15.Страховка авто/человек" + "\n" +
-                                    "Выберете необходимый пункт ⬇️ ", 666, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
+                                    "\n" +
+                                    "1️⃣ Приглашение Воеводское ( Виза )\n" +
+                                    "2️⃣ Полугодовое приглашение\n" +
+                                    "3️⃣ Комплект документов на карту побыту\n" +
+                                    "4️⃣ Карта побыту рабочая(с внеском)\n" +
+                                    "5️⃣ Карта побытку рабочая(без внеска)\n" +
+                                    "6️⃣ Мельдунок\n" +
+                                    "7️⃣ Умовы найму \n" +
+                                    "8️⃣ Wstepne\n" +
+                                    "9️⃣ Сан-эпид\n" +
+                                    "\uD83D\uDD1F Психотесты для водитилей \n" +
+                                    "1️⃣1️⃣ Orzeczenie для водителей\n" +
+                                    "1️⃣2️⃣ Код 95\n" +
+                                    "1️⃣3️⃣ Получение банковского кредита\n" +
+                                    "1️⃣4️⃣ Выписка из банка\n" +
+                                    "1️⃣5️⃣ Страховка авто/человек\n" +
+                                    "1️⃣6️⃣ Справка о несудимости\n" +
+                                    "1️⃣7️⃣ BNP\n" +
+                                    "1️⃣8️⃣ NIP/PIT\n" +
+                                    "1️⃣9️⃣ Виза в USA \uD83C\uDDFA\uD83C\uDDF8 | England \uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F | Australia \uD83C\uDDE6\uD83C\uDDFA", 666, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -790,7 +793,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Работа в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете нужный пункт",23112000,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()+update.getMessage().getContact().getPhoneNumber()+update.getMessage().getChat().getInviteLink()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -819,7 +822,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Нужен Бот":
                         try {
                             sendApiMethod(send_Message_With_Remake("Контакт для сотрудничества: @frikok",333,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId("516538254").setText("ZAKAZ NA BOTA"+update.getMessage().getChat().getUserName()));
+
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -839,16 +842,16 @@ public class Bot extends TelegramLongPollingBot {
                             e.printStackTrace();
                         }
                         break;
-                    case "Афиша Мероприятий ":
+                    case "Афиша Мероприятий":
                         try {
                             sendApiMethod(send_Message_With_Remake("https://t.me/warszawweekend",333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case "Знакомства ":
+                    case "Знакомства":
                         try {
-                            sendApiMethod(send_Message_With_Remake("https://t.me/warszawweekend",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("https://t.me/warsawchat",333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -858,17 +861,13 @@ public class Bot extends TelegramLongPollingBot {
 
 
                     default:
-                        if (update.getMessage().isReply()) {
-                            try {
-                                sendApiMethod(new SendMessage().setChatId(update.getMessage().getReplyToMessage().getText().split("from")[1].trim()).setText(update.getMessage().getText()));
-                            } catch (TelegramApiException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (user.isAdmin_support()) {
-                            try {
-                                sendApiMethod(new SendMessage().setChatId(support_id).setText(update.getMessage().getText() + " from " + update.getMessage().getChatId()));
-                            } catch (TelegramApiException e) {
-                                e.printStackTrace();
+                        if(update.getMessage().getChatId().toString().equals("516538254")){
+                            for (String r:rassilka){
+                                try {
+                                    execute(new SendMessage().setChatId(r).setText(update.getMessage().getText()));
+                                } catch (TelegramApiException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
@@ -1005,6 +1004,9 @@ public class Bot extends TelegramLongPollingBot {
             KeyboardRow row4=new KeyboardRow();
             KeyboardRow row5=new KeyboardRow();
             KeyboardRow row6=new KeyboardRow();
+            KeyboardRow row7=new KeyboardRow();
+            KeyboardRow row8=new KeyboardRow();
+            KeyboardRow row9=new KeyboardRow();
             row1.add(new KeyboardButton("1"));
             row1.add(new KeyboardButton("2"));
             row1.add(new KeyboardButton("3"));
@@ -1021,7 +1023,10 @@ public class Bot extends TelegramLongPollingBot {
             row5.add(new KeyboardButton("14"));
             row5.add(new KeyboardButton("15"));
             row6.add(new KeyboardButton("16"));
-            row6.add(new KeyboardButton("Вернуться  в главное меню↩️"));
+            row6.add(new KeyboardButton("17"));
+            row6.add(new KeyboardButton("18"));
+            row7.add(new KeyboardButton("19"));
+            row8.add(new KeyboardButton("Вернуться  в главное меню↩️"));
 
 
 
@@ -1034,6 +1039,8 @@ public class Bot extends TelegramLongPollingBot {
 
             rows.add(row5);
             rows.add(row6);
+            rows.add(row7);
+            rows.add(row8);
 
         }
         if(type==0000)
@@ -1095,8 +1102,8 @@ public class Bot extends TelegramLongPollingBot {
             row4.add(new KeyboardButton("Жилье"));
 
             row5.add(new KeyboardButton(" Каталог услуг | Варшава "));
-            row6.add(new KeyboardButton("Афиша Мероприятий "));
-            row7.add(new KeyboardButton("Знакомства "));
+            row6.add(new KeyboardButton("Афиша Мероприятий"));
+            row7.add(new KeyboardButton("Знакомства"));
             row8.add(new KeyboardButton("Вернуться  в главное меню↩️"));
             rows.add(row1);
             rows.add(row2);
