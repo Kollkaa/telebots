@@ -28,13 +28,15 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
+    boolean add=true;
     String chatadmin="-361379869";
     String chatadmin2="-365050746";
    boolean shutdown=false;
    boolean shut=false;
    boolean flag=false;
     Map<String,User> users=new HashMap<>();
-    List<String >rassilka=new ArrayList<>();
+    //List<String >rassilka=new ArrayList<>();
+    Set<String> rassilka = new HashSet<String>();
     List<String>listNickname=new ArrayList<>();
     User user;
     String support_id="516538254";//"314254027";
@@ -191,24 +193,24 @@ public class Bot extends TelegramLongPollingBot {
 
 
                     case "/start":
-                        if(update.getMessage().getChatId().toString().equals("516538254")) {
+                        if(update.getMessage().getChatId().toString().equals("427806944")) {
                             try {
                                 execute(new SendMessage().setText("Привет, Администратор. Все заказы в группе.").setChatId(update.getMessage().getChatId()));
                                 System.out.println("Not Size");
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
+                            System.out.println("Do:"+ rassilka.size());
 
                         }
                         else {
-                            for(String s:rassilka){
-                                if(s!=update.getMessage().getChatId().toString()){
-                                    rassilka.add(update.getMessage().getChatId().toString());
-                                    System.out.println("Complete");
-                                    System.out.println(rassilka.size());
+                            rassilka.add(update.getMessage().getChatId().toString());
+                            rassilka.size();
+                            System.out.println(":"+ rassilka.size());
 
-                                }
-                            }
+
+
+
 
 
                         }
@@ -462,7 +464,7 @@ public class Bot extends TelegramLongPollingBot {
                             sendApiMethod(send_Message_With_Remake("Умовы найму\n" +
                                     "\n" +
                                     "⏳Время ожидания 1 день\n" +
-                                    "\uD83D\uDCB5Цена: 250 zl  " , 33,update.getMessage().getChatId().toString()));
+                                    "\uD83D\uDCB5Цена: 200 zl  " , 33,update.getMessage().getChatId().toString()));
                             execute(new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText("Cписок необходимых документов: \n" +
                                     "- фото первой страницы паспорта \n" +
                                     "- с какого числа"));
@@ -861,7 +863,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
                     default:
-                        if(update.getMessage().getChatId().toString().equals("516538254")){
+                        if(update.getMessage().getChatId().toString().equals("427806944")){
                             for (String r:rassilka){
                                 try {
                                     execute(new SendMessage().setChatId(r).setText(update.getMessage().getText()));
