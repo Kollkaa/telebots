@@ -968,11 +968,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@Polled_bot";///""@Documents_in_Poland_bot;
+        return "@Documents_in_Poland_bot";///""@Documents_in_Poland_bot;
     }
 
     @Override
     public String getBotToken() {
-        return "851210991:AAEJhjujEK7z5e_SfmPevHeWLP0KiK0AHmA";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo
+        return "808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo
     }
 }
