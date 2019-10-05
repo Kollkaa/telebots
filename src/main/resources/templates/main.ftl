@@ -15,7 +15,7 @@
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
        Сделать расcылку
     </a>
-    <div class="collapse big-banner"  style="height: 500px ;width: 250px;" id="collapseExample">
+    <div class="collapse big-banner"   id="collapseExample">
         <div class="form-group mt-3">
             <form method="post"  action="/add" >
                 <div class="form-group">

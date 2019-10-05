@@ -1,32 +1,27 @@
 package org.telegramBot.zakaz1;
 
-import org.apache.commons.io.FileUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegramBot.zakaz1.domain.Document;
 import org.telegramBot.zakaz1.domain.Link;
+import org.telegramBot.zakaz1.domain.TelUser;
 import org.telegramBot.zakaz1.repos.DocumentRepo;
 import org.telegramBot.zakaz1.repos.LinkRepo;
+import org.telegramBot.zakaz1.repos.TeluUserRepo;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -40,17 +35,19 @@ public class Bot extends TelegramLongPollingBot {
    boolean shutdown=false;
    boolean shut=false;
    boolean flag=false;
-    Map<String,User> users=new HashMap<>();
+    Map<String, TelUser> users=new HashMap<>();
     //List<String >rassilka=new ArrayList<>();
     Set<String> rassilka = new HashSet<String>();
     List<String>listNickname=new ArrayList<>();
-    User user;
+    TelUser telUser;
     String support_id="516538254";//"314254027";
     int count=0;
     @Autowired
     private DocumentRepo documentRepo;
     @Autowired
     private LinkRepo linkRepo;
+    @Autowired
+    private TeluUserRepo teluUserRepo;
         @PostConstruct
         public void construct() throws IOException {
 
@@ -248,11 +245,12 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             System.out.println(update.getMessage().getChatId().toString());
-            if (!users.containsKey(update.getMessage().getChatId().toString())) {
-                users.put(update.getMessage().getChatId().toString(), new User(update.getMessage().getChatId().toString(),false));
-                user = users.get(update.getMessage().getChatId().toString());
-            } else {
-                user = users.get(update.getMessage().getChatId().toString());
+            if (teluUserRepo.findByChatid(update.getMessage().getChatId().toString())!=null)
+                telUser=teluUserRepo.findByChatid(update.getMessage().getChatId().toString());
+            else
+            {
+                telUser=new TelUser(update.getMessage().getChatId().toString(),false);
+                teluUserRepo.save(telUser);
             }
 
 
@@ -272,12 +270,12 @@ public class Bot extends TelegramLongPollingBot {
 
                         try {
 
-                            sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + "В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(user.getChat_id()));
+                            sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + "В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(telUser.getChat_id()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         try {
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() + "\n" + user.getType_doc()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() + "\n" + telUser.getType_doc()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -292,14 +290,14 @@ public class Bot extends TelegramLongPollingBot {
 
                         }
                         try {
-                            sendApiMethod(new SendMessage().setText("Список пользователей, которые посящали бота: " + res + "\n" + "Общее количество посещений:" + listNickname.size()).setChatId(user.getChat_id()));
+                            sendApiMethod(new SendMessage().setText("Список пользователей, которые посящали бота: " + res + "\n" + "Общее количество посещений:" + listNickname.size()).setChatId(telUser.getChat_id()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
 
                     case "Отправить":
-                        for (String path : user.getDocument_path()) {
+                        for (String path : telUser.getDocument_path()) {
                             try {
                                 execute(new SendDocument().setChatId(support_id).setDocument(new File(path)));
                             } catch (TelegramApiException e) {
@@ -344,7 +342,7 @@ public class Bot extends TelegramLongPollingBot {
                         flag=false;
                         listNickname.add(update.getMessage().getChat().getUserName());
                         count += 1;
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
 
                             sendApiMethod(send_Message_With_Remake("Здравствуйте \uD83D\uDC4B\uD83C\uDFFC\n" +
@@ -361,9 +359,9 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "Помощь❗️":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(new SendMessage().setChatId(user.getChat_id()).setText(" ⁃ Как пользоваться ботом ?\n" +
+                            sendApiMethod(new SendMessage().setChatId(telUser.getChat_id()).setText(" ⁃ Как пользоваться ботом ?\n" +
                                     "Здравствуйте, все очень просто !\n" +
                                     " 1. выберите и нажмите на пункт Меню\n" +
                                     " 2. нажмите на документ который вам надо \n" +
@@ -375,7 +373,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "\uD83D\uDCD1Документы":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
 
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
@@ -387,7 +385,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
 
                     case "Вернуться  в главное меню↩️":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт ⬇️ ", 1, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -395,7 +393,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "Назад↩️":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
 
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
@@ -409,7 +407,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
                     case "1.Украина, Росиия, Белларусь":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCB5Цена: 1000 zł (Украина, Росиия, Белларусь )", 33, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -418,7 +416,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
 
                     case "2.Грузия и все зак. на -АН (страны СНГ бывшего)":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Цена 1100 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -426,7 +424,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "3.Любые другие страны":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Цена 1400 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -435,8 +433,8 @@ public class Bot extends TelegramLongPollingBot {
                         break;
 
                     case "1.Короткий":
-                        user.setType_doc(TypeDoc.type_1_9_12);
-                        user.setAdmin_support(false);
+                        telUser.setType_doc(TypeDoc.type_1_9_12);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 1300 зл.\n Срок до 10 дн.", 777, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -444,8 +442,8 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "2.Длинный":
-                        user.setType_doc(TypeDoc.type_1_9_12_1);
-                        user.setAdmin_support(false);
+                        telUser.setType_doc(TypeDoc.type_1_9_12_1);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 2800 зл.\n Срок до 20 дн.", 777, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -456,7 +454,7 @@ public class Bot extends TelegramLongPollingBot {
 
                     case "К выбору докуметов" :
 
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Доступные документы для просмотра информации:"+"\n"+"1.Приглашение воеводское" + "\n" + "2.Полугодовое приглашение" + "\n" + "3.Комплект документов на карту побыту" + "\n" + "4.Карта побыту рабочая(с внеском)" + "\n" + "5.Карта побыту рабочая(без внеска)" + "\n" + "6.Мельдунок" + "\n" + "7.Умовы найму" + "\n" + "8.Wstepne" + "\n" + "9.Cан-эпид" + "\n" + "10.Психотесты для водителей" + "\n" + "11.Orzeczenie для водителей" + "\n" + "12.Код 95" + "\n" + "13.Получение банковского кредита" + "\n" + "14.Выписка из банка" + "\n" + "15.Страховка авто/человек" + "\n" +
                             "Выберете необходимый пункт ⬇️ ", 666, update.getMessage().getChatId().toString()));
@@ -466,7 +464,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
 
                     case "Сотрудничество\uD83D\uDC64":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете пункт для сотрудничиства\uD83D\uDD3D", 111, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -474,7 +472,7 @@ public class Bot extends TelegramLongPollingBot {
                         }
                         break;
                     case "🚸Навигатор Польша":
-                        user.setAdmin_support(false);
+                        telUser.setAdmin_support(false);
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете город\uD83D\uDD3D", 222, update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
@@ -958,7 +956,14 @@ public class Bot extends TelegramLongPollingBot {
 
         return new SendMessage().setChatId(chat_id).setText(text).setReplyMarkup(keyboard);
     }
-
+    public void SendMes(String text,String chat)
+    {
+        try {
+            sendApiMethod(new SendMessage().setText(text).setChatId(chat));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override

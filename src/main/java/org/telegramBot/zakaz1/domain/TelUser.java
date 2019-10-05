@@ -1,9 +1,18 @@
-package org.telegramBot.zakaz1;
+package org.telegramBot.zakaz1.domain;
 
+import org.telegramBot.zakaz1.TypeDoc;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.ArrayList;
-
-public class User {
-    private String chat_id;
+@Entity
+public class TelUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String chatid;
     private String  type_doc;
     private boolean admin_support;
     private  boolean admin;
@@ -20,11 +29,13 @@ public class User {
         document_path.add(path);
     }
 
-    public User(String chat_id, boolean admin) {
-        this.chat_id = chat_id;
+    public TelUser(String chat_id, boolean admin) {
+        this.chatid = chat_id;
         this. admin=admin;
     }
 
+    public TelUser() {
+    }
 
     public boolean  getAdmin() {
         return admin;
@@ -48,6 +59,6 @@ public class User {
     }
 
     public String getChat_id() {
-        return chat_id;
+        return chatid;
     }
 }

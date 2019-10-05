@@ -1,7 +1,9 @@
 package org.telegramBot.zakaz1.controller;
 
 
+import org.telegramBot.zakaz1.Bot;
 import org.telegramBot.zakaz1.domain.Message;
+import org.telegramBot.zakaz1.domain.TelUser;
 import org.telegramBot.zakaz1.domain.User;
 import org.telegramBot.zakaz1.repos.MessageRepo;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegramBot.zakaz1.repos.TeluUserRepo;
 
 
 import java.io.IOException;
@@ -22,8 +25,10 @@ import java.util.Map;
 public class MainController {
     @Autowired
     private MessageRepo messageRepo;
-
-
+    @Autowired
+    private TeluUserRepo teluUserRepo;
+    @Autowired
+    private Bot bot;
 
 
 
@@ -63,8 +68,10 @@ public class MainController {
             Map<String, Object> model
     ) throws IOException, TelegramApiException {
         Message message = new Message(text, tag, user);
-
-       /* for (User us:userRepo.findAll())
+       for (TelUser ar:teluUserRepo.findAll()) {
+           bot.SendMes(text,ar.getChat_id());
+       }
+       /* for (TelUser us:userRepo.findAll())
         {
             if (us.isAdmin())
             {
