@@ -192,9 +192,10 @@ public class Bot extends TelegramLongPollingBot {
                     "Cписок необходимых документов:  По указанию менеджера",
                     "doc19.jpg",19);
             documents.add(document19);
-            for (Document doc:documentRepo.findAll()) {
+            for (Document doc:documents) {
                 if (documentRepo.findByFoto(doc.getFoto()) == null) {
                     documentRepo.save(doc);
+                    System.out.println("true");
                 }
 
             }
@@ -220,11 +221,12 @@ public class Bot extends TelegramLongPollingBot {
             links.add(link9);
             Link link10=new Link("Краков","https://t.me/Krakow_poland");
             links.add(link10);
-            for (Link link:linkRepo.findAll()) {
+            for (Link link:links) {
                 if (linkRepo.findByNameBut(link.getNameBut()) == null) {
                     linkRepo.save(link);
-                } else
-                    linkRepo.save(link);
+                    System.out.println("true");
+                }
+
             }
 
 
