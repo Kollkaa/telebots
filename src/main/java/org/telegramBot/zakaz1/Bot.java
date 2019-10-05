@@ -538,7 +538,7 @@ public class Bot extends TelegramLongPollingBot {
 
                         }
                         break;
-                    case " Каталог услуг | Варшава ":
+                    case "Каталог услуг | Варшава":
 
                         try {
                             sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Каталог").getTextLink()
