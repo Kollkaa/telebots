@@ -193,9 +193,10 @@ public class Bot extends TelegramLongPollingBot {
                     "doc19.jpg",19);
             documents.add(document19);
             for (Document doc:documentRepo.findAll()) {
-                if (documentRepo.findByFoto(doc.getFoto()) != null) {
-                } else
+                if (documentRepo.findByFoto(doc.getFoto()) == null) {
                     documentRepo.save(doc);
+                }
+
             }
 
             List<Link> links=new ArrayList<>();
@@ -220,7 +221,8 @@ public class Bot extends TelegramLongPollingBot {
             Link link10=new Link("Краков","https://t.me/Krakow_poland");
             links.add(link10);
             for (Link link:linkRepo.findAll()) {
-                if (linkRepo.findByNameBut(link.getNameBut()) != null) {
+                if (linkRepo.findByNameBut(link.getNameBut()) == null) {
+                    linkRepo.save(link);
                 } else
                     linkRepo.save(link);
             }
@@ -980,11 +982,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@Documents_in_Poland_bot";///""@Documents_in_Poland_bot;
+        return "@warsaww_bot";///""@Documents_in_Poland_bot;
     }
 
     @Override
     public String getBotToken() {
-        return "808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo
+        return "827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo
     }
 }
