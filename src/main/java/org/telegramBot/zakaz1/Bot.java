@@ -221,6 +221,16 @@ public class Bot extends TelegramLongPollingBot {
             links.add(link9);
             Link link10=new Link("Краков","https://t.me/Krakow_poland");
             links.add(link10);
+            Link link11=new Link("Учеба в Польше","Контакт консультатнта по учебе: @job_polandd ");
+            links.add(link11);
+            Link link12=new Link("Вакансии","https://t.me/praca_polsha");
+            links.add(link12);
+            Link link13=new Link("Связаться с Менеджером","Менеджер по работе: @job_polandd");
+            links.add(link13);
+            Link link14=new Link("Реклама в Польше","Контакт для сотрудничества: @frikok\"+\"\\n\"+\"https://teletype.in/@lassis/HkDmvNhCN");
+            links.add(link14);
+            Link link15=new Link("Нужен Бот","Контакт для сотрудничества: @frikok");
+            links.add(link15);
             for (Link link:links) {
                 if (linkRepo.findByNameBut(link.getNameBut()) == null) {
                     linkRepo.save(link);
@@ -582,13 +592,12 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Учеба в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Контакт консультатнта по учебе: @job_polandd ",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Учеба в Польше").getTextLink(),333,update.getMessage().getChatId().toString()));
                             sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Учебе"+ "@"+update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
-
                     case "Работа в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете нужный пункт",23112000,update.getMessage().getChatId().toString()));
@@ -613,14 +622,14 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Реклама в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Контакт для сотрудничества: @frikok"+"\n"+"https://teletype.in/@lassis/HkDmvNhCN",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Реклама в Польше").getTextLink(),333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "Нужен Бот":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Контакт для сотрудничества: @frikok",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Нужен Бот").getTextLink(),333,update.getMessage().getChatId().toString()));
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -628,7 +637,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Вакансии":
                         try {
-                            sendApiMethod(send_Message_With_Remake("https://t.me/praca_polsha",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Вакансии").getTextLink(),333,update.getMessage().getChatId().toString()));
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -636,7 +645,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Связаться с Менеджером":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Менеджер по работе: @job_polandd",333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Связаться с Менеджером").getTextLink(),333,update.getMessage().getChatId().toString()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
