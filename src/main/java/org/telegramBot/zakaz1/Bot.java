@@ -65,6 +65,7 @@ public class Bot extends TelegramLongPollingBot {
                     "⏳Срок изготовления 30-45 дней","Cписок необходимых документов: \n" +
                     "- все заполненные страницы паспорта","doc1.jpg",1);
             documents.add(document1);
+
             Document document2=new Document("Полугодовое приглашение","\uD83D\uDCDDПриглашение полугодовые\n" +
                     "⏳Срок изготовления 8-10 дней\n" +
                     "\uD83D\uDCB5Цена: 350 zł (Украина, Росиия, Белларусь )","Cписок необходимых документов: \n" +
@@ -191,7 +192,12 @@ public class Bot extends TelegramLongPollingBot {
                     "Cписок необходимых документов:  По указанию менеджера",
                     "doc19.jpg",19);
             documents.add(document19);
-            documentRepo.saveAll(documents);
+            for (Document doc:documentRepo.findAll()) {
+                if (documentRepo.findByFoto(doc.getFoto()) != null) {
+                } else
+                    documentRepo.save(doc);
+            }
+
             List<Link> links=new ArrayList<>();
             Link link1=new Link("Варшава_Обьявление","⁃ Объявления https://t.me/warsaw_chats");
             links.add(link1);
@@ -213,8 +219,12 @@ public class Bot extends TelegramLongPollingBot {
             links.add(link9);
             Link link10=new Link("Краков","https://t.me/Krakow_poland");
             links.add(link10);
+            for (Link link:linkRepo.findAll()) {
+                if (linkRepo.findByNameBut(link.getNameBut()) != null) {
+                } else
+                    linkRepo.save(link);
+            }
 
-            linkRepo.saveAll(links);
 
         }
     @Override
