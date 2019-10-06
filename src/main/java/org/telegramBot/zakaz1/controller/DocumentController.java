@@ -56,6 +56,11 @@ System.out.println(fileName);
         return fileName;
     }
 
+    @PostMapping("/documentDel")
+    public  String delDoc(@RequestParam("documentId")Document document){
+        documentRepo.delete(document);
+        return "redirect:/document";
+    }
     @PostMapping("/documentAdd")
     public String addUser(Document document,
                           @RequestParam String name,

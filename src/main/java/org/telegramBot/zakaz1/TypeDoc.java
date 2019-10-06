@@ -35,7 +35,18 @@ public enum TypeDoc {
         return title;
     }
 
+/*
+spring.datasource.url=jdbc:postgres://jirqnmhipwokvv:b6f9aac8ecd5857d748d640500fcb55398c5aa9f69fbb5a7291ca091e304c57a@ec2-176-34-183-20.eu-west-1.compute.amazonaws.com:5432/d8nf85oe66bc6d
+spring.datasource.username=jirqnmhipwokvv
+spring.datasource.password=b6f9aac8ecd5857d748d640500fcb55398c5aa9f69fbb5a7291ca091e304c57a
+spring.jpa.generate-ddl=true
 
+
+spring.freemarker.expose-request-attributes=true
+
+
+upload.path=src/main/resources/photos
+*/
 
 
 }

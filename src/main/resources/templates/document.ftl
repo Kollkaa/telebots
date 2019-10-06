@@ -56,6 +56,11 @@
                     ${document.getName()}
                     <a href="/document/${document.getId()?c}">Редактировать</a>
                 </div>
+                <div class="card-footer text-muted">
+                    <form method="post">
+                        <input type="hidden" name="documentId" value="${document.getId()?C}">
+                    </form>
+                </div>
             </div>
         <#else>
             No message
