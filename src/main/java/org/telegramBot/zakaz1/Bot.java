@@ -993,11 +993,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@Documents_in_Poland_bot";///""@Documents_in_Poland_bot;@warsaww_bot
+        return "@warsaww_bot";///""@Documents_in_Poland_bot;@warsaww_bot
     }
 
     @Override
     public String getBotToken() {
-        return "808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo";// ||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
+        return "827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
     }
 }

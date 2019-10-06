@@ -57,8 +57,10 @@
                     <a href="/document/${document.getId()?c}">Редактировать</a>
                 </div>
                 <div class="card-footer text-muted">
-                    <form method="post">
-                        <input type="hidden" name="documentId" value="${document.getId()?C}">
+                    <form action="/document/documentDel" method="post">
+                        <input type="hidden" name="documentId" value="${document.getId()?c}">
+                        <input type="hidden" value="${_csrf.token}" name="_csrf">
+                        <button type="submit">Удалить</button>
                     </form>
                 </div>
             </div>
