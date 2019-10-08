@@ -16,6 +16,7 @@ public class TelUser {
     private String  type_doc;
     private boolean admin_support;
     private  boolean admin;
+    private String name;
 
 
     public ArrayList<String> getDocument_path() {
@@ -35,6 +36,14 @@ public class TelUser {
     }
 
     public TelUser() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean  getAdmin() {

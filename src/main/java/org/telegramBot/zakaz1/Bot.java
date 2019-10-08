@@ -274,6 +274,13 @@ public class Bot extends TelegramLongPollingBot {
             else
             {
                 telUser=new TelUser(update.getMessage().getChatId().toString(),false);
+                try {
+                    telUser.setName(update.getMessage().getChat().getFirstName());
+                }catch (Exception e)
+                {
+                    telUser.setName(update.getMessage().getChat().getUserName());
+                }
+
                 teluUserRepo.save(telUser);
             }
 
