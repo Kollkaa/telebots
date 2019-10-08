@@ -7,7 +7,11 @@
                     <i>${use.getChat_id()}</i>
                 </div>
                 <div class="card-footer text-muted">
-                    <span>${use.get()}</span>
+                    <#attempt >
+                        <span>${use.get()}</span>
+                        <#recover >
+                        У пользователя нету имени
+                    </#attempt>
 
                 </div>
             </div>

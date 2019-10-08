@@ -21,6 +21,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="/link">Все сылки</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/users">Подписчики</a>
+
+            </li>
                      <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" href="/user">Пользователи</a>

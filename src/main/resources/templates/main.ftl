@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="card-columns " style="height: 100px; width: 100px">
+    <div class="card-columns " >
         <#list messages as message>
             <div class="card my-3 " >
                 <div class="m-2">
