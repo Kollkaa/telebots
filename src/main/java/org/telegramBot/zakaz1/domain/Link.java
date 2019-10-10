@@ -1,10 +1,7 @@
 package org.telegramBot.zakaz1.domain;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Link {
@@ -12,16 +9,29 @@ public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nameBut;
     private String textLink;
+    private String nameBut;
 
+    @ManyToOne
+    @JoinColumn(name = "link_id")
+    private City city;
 
     public Link() {
     }
 
     public Link(String nameBut, String textLink) {
-        this.nameBut = nameBut;
         this.textLink = textLink;
+        this.nameBut = nameBut;
+
+
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Long getId() {

@@ -16,9 +16,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegramBot.zakaz1.domain.City;
 import org.telegramBot.zakaz1.domain.Document;
 import org.telegramBot.zakaz1.domain.Link;
 import org.telegramBot.zakaz1.domain.TelUser;
+import org.telegramBot.zakaz1.repos.CityRepo;
 import org.telegramBot.zakaz1.repos.DocumentRepo;
 import org.telegramBot.zakaz1.repos.LinkRepo;
 import org.telegramBot.zakaz1.repos.TeluUserRepo;
@@ -42,12 +44,15 @@ public class Bot extends TelegramLongPollingBot {
     TelUser telUser;
     String support_id="516538254";//"314254027";
     int count=0;
+    private City city;
     @Autowired
     private DocumentRepo documentRepo;
     @Autowired
     private LinkRepo linkRepo;
     @Autowired
     private TeluUserRepo teluUserRepo;
+    @Autowired
+    private CityRepo cityRepo;
         @PostConstruct
         public void construct() throws IOException {
 
@@ -200,28 +205,55 @@ public class Bot extends TelegramLongPollingBot {
 
             }
 
+            City city1=new City("Варшава");
+            City city2=new City("Вроцслав");
+            City city3=new City("Познань");
+            City city4=new City("Краков");
+            List<City> cities=new ArrayList<>();
+            cities.add(city1);
+            cities.add(city2);
+            cities.add(city3);
+            cities.add(city4);
+            for (City c: cities)
+            {
+                if (cityRepo.findByName(c.getName())==null)
+                {
+                    cityRepo.save(c);
+                    System.out.println("true");
+                }
+            }
             List<Link> links=new ArrayList<>();
-            Link link1=new Link("Варшава_Обьявление","⁃ Объявления https://t.me/warsaw_chats");
+            Link link1=new Link("Обьявление","⁃ Объявления https://t.me/warsaw_chats");
+            link1.setCity(city1);
             links.add(link1);
-            Link link2=new Link("Варшава_Работа","⁃ Работа https://t.me/Warsawwork");
+            Link link2=new Link("Работа","⁃ Работа https://t.me/Warsawwork");
+            link2.setCity(city1);
             links.add(link2);
-            Link link3=new Link("Варшава_Ринок","⁃ Рынок  https://t.me/warsaw_shop");
+            Link link3=new Link("Ринок","⁃ Рынок  https://t.me/warsaw_shop");
+            link3.setCity(city1);
             links.add(link3);
-            Link link4=new Link("Варшава_Жилье","⁃ Жилье https://t.me/warsaw_1");
+            Link link4=new Link("Жилье","⁃ Жилье https://t.me/warsaw_1");
+            link4.setCity(city1);
             links.add(link4);
-            Link link5=new Link("Варшава_Каталог","⁃ Каталог услуг | Варшава https://t.me/warsaw_poland");
+            Link link5=new Link("Каталог","⁃ Каталог услуг | Варшава https://t.me/warsaw_poland");
+            link5.setCity(city1);
             links.add(link5);
-            Link link6=new Link("Варшава_Афиша","https://t.me/warszawweekend");
+            Link link6=new Link("Афиша","https://t.me/warszawweekend");
+            link6.setCity(city1);
             links.add(link6);
-            Link link7=new Link("Варшава_Знакомства","https://t.me/warsawchat");
+            Link link7=new Link("Знакомства","https://t.me/warsawchat");
+            link7.setCity(city1);
             links.add(link7);
-            Link link8=new Link("Вроцлав","https://t.me/Wroclaw_poland");
+            Link link8=new Link("Справка","https://t.me/Wroclaw_poland");
+            link8.setCity(city2);
             links.add(link8);
-            Link link9=new Link("Познань","https://t.me/Poznan_poland");
+            Link link9=new Link("Информация","https://t.me/Poznan_poland");
+            link9.setCity(city3);
             links.add(link9);
-            Link link10=new Link("Краков","https://t.me/Krakow_poland");
+            Link link10=new Link("Інформація","https://t.me/Krakow_poland");
+            link10.setCity(city4);
             links.add(link10);
-            Link link11=new Link("Учеба в Польше","Контакт консультатнта по учебе: @job_polandd ");
+            Link link11=new Link("Учеба в Польше","Контакт консультатнта по учебе: @job_polandd");
             links.add(link11);
             Link link12=new Link("Вакансии","https://t.me/praca_polsha");
             links.add(link12);
@@ -234,9 +266,8 @@ public class Bot extends TelegramLongPollingBot {
             for (Link link:links) {
                 if (linkRepo.findByNameBut(link.getNameBut()) == null) {
                     linkRepo.save(link);
-                    System.out.println("true");
+                    System.out.println(link.getNameBut());
                 }
-
             }
 
 
@@ -248,7 +279,7 @@ public class Bot extends TelegramLongPollingBot {
         int count=1;
         for (Document doc:documentRepo.findAll())
         {String r="⃣ ";
-            System.out.println(doc.getFoto());
+
             if (count>9)
             {
                 documents+=String.valueOf(count).split("")[0]+r;
@@ -288,25 +319,24 @@ public class Bot extends TelegramLongPollingBot {
             if (update.getMessage().getText() != null) {
                 String pass=update.getMessage().getText();
 
-                switch (update.getMessage().getText())
-                {
+                switch (update.getMessage().getText()) {
 //
                     case "/on":
-                        shutdown=false;
+                        shutdown = false;
                         break;
-                    case "/off" :
-                        shutdown=true;
+                    case "/off":
+                        shutdown = true;
                         break;
                     case "Заказать":
 
                         try {
 
-                            sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + "В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(telUser.getChat_id()));
+                            sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + " В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(telUser.getChat_id()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         try {
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя:" + "@" + update.getMessage().getChat().getUserName() + "\n" + telUser.getType_doc()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя: " + "@" + update.getMessage().getChat().getUserName() + " \n " + telUser.getType_doc()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -339,51 +369,50 @@ public class Bot extends TelegramLongPollingBot {
                     case "Назад\uD83D\uDD19":
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете вашу страну"
-                                    , 5, update.getMessage().getChatId().toString()));
+                                    , 5, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                     case "Назад <--":
                         try {
                             sendApiMethod(send_Message_With_Remake("..."
-                                    , 6, update.getMessage().getChatId().toString()));
+                                    , 6, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
 
 
                     case "/start":
-                        if(update.getMessage().getChatId().toString().equals("427806944")) {
+                        if (update.getMessage().getChatId().toString().equals("427806944")) {
                             try {
                                 execute(new SendMessage().setText("Привет, Администратор. Все заказы в группе.").setChatId(update.getMessage().getChatId()));
                                 System.out.println("Not Size");
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
-                            System.out.println("Do:"+ rassilka.size());
+                            System.out.println("Do:" + rassilka.size());
 
-                        }
-                        else {
+                        } else {
                             rassilka.add(update.getMessage().getChatId().toString());
                             rassilka.size();
-                            System.out.println(":"+ rassilka.size());
+                            System.out.println(":" + rassilka.size());
 
                         }
 
-                        flag=false;
+                        flag = false;
                         listNickname.add(update.getMessage().getChat().getUserName());
                         count += 1;
                         telUser.setAdmin_support(false);
                         try {
 
                             sendApiMethod(send_Message_With_Remake("Здравствуйте \uD83D\uDC4B\uD83C\uDFFC\n" +
-                                            "Poland_inc - это современная автоматизированая платформа, которая облегчит вам жизнь в Польше \uD83C\uDDF5\uD83C\uDDF1\n" +
-                                            "Здесь вы сможете ⤵️\n" +
-                                            " ⁃ Найти любой документ\n" +
-                                            " ⁃ Найти работу или учёбу \n" +
-                                            " ⁃ Каталог групп по Польше\n" +
-                                            " ⁃ Заказать рекламу или бота для бизнеса !"+'\n'+
-                                    "\uD83C\uDD98ВНИМАНИЕ случаи с мошенничеством увеличились ‼️ просим пользоваться услугами только проверенных лиц \uD83D\uDC6E\uD83C\uDFFC\u200D♂️", 1, update.getMessage().getChatId().toString()));
+                                    "Poland_inc - это современная автоматизированая платформа, которая облегчит вам жизнь в Польше \uD83C\uDDF5\uD83C\uDDF1\n" +
+                                    "Здесь вы сможете ⤵️\n" +
+                                    " ⁃ Найти любой документ\n" +
+                                    " ⁃ Найти работу или учёбу \n" +
+                                    " ⁃ Каталог групп по Польше\n" +
+                                    " ⁃ Заказать рекламу или бота для бизнеса !" + '\n' +
+                                    "\uD83C\uDD98ВНИМАНИЕ случаи с мошенничеством увеличились ‼️ просим пользоваться услугами только проверенных лиц \uD83D\uDC6E\uD83C\uDFFC\u200D♂️", 1, update.getMessage().getChatId().toString(), new City()));
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -409,7 +438,7 @@ public class Bot extends TelegramLongPollingBot {
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
                                     "\n" +
-                                    documents,666, update.getMessage().getChatId().toString()));
+                                    documents, 666, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -417,8 +446,9 @@ public class Bot extends TelegramLongPollingBot {
 
                     case "Вернуться  в главное меню↩️":
                         telUser.setAdmin_support(false);
+                        city=null;
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт ⬇️ ", 1, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт ⬇️ ", 1, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -429,18 +459,17 @@ public class Bot extends TelegramLongPollingBot {
                         try {
                             sendApiMethod(send_Message_With_Remake("\uD83D\uDCC2СПИСОК ДОКУМЕНТОВ\n" +
                                     "\n" +
-                                    documents, 666, update.getMessage().getChatId().toString()));
+                                    documents, 666, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
 
 
-
                     case "1.Украина, Росиия, Белларусь":
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("\uD83D\uDCB5Цена: 1000 zł (Украина, Росиия, Белларусь )", 33, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("\uD83D\uDCB5Цена: 1000 zł (Украина, Росиия, Белларусь )", 33, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -449,7 +478,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "2.Грузия и все зак. на -АН (страны СНГ бывшего)":
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Цена 1100 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Цена 1100 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -457,7 +486,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "3.Любые другие страны":
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Цена 1400 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Цена 1400 зл.\n Срок до 40дн", 33, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -467,7 +496,7 @@ public class Bot extends TelegramLongPollingBot {
                         telUser.setType_doc(TypeDoc.type_1_9_12);
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 1300 зл.\n Срок до 10 дн.", 777, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 1300 зл.\n Срок до 10 дн.", 777, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -476,19 +505,19 @@ public class Bot extends TelegramLongPollingBot {
                         telUser.setType_doc(TypeDoc.type_1_9_12_1);
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 2800 зл.\n Срок до 20 дн.", 777, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Любая страна.\n Цена 2800 зл.\n Срок до 20 дн.", 777, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
 
 
-                    case "К выбору докуметов" :
+                    case "К выбору докуметов":
 
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Доступные документы для просмотра информации:"+"\n"+"1.Приглашение воеводское" + "\n" + "2.Полугодовое приглашение" + "\n" + "3.Комплект документов на карту побыту" + "\n" + "4.Карта побыту рабочая(с внеском)" + "\n" + "5.Карта побыту рабочая(без внеска)" + "\n" + "6.Мельдунок" + "\n" + "7.Умовы найму" + "\n" + "8.Wstepne" + "\n" + "9.Cан-эпид" + "\n" + "10.Психотесты для водителей" + "\n" + "11.Orzeczenie для водителей" + "\n" + "12.Код 95" + "\n" + "13.Получение банковского кредита" + "\n" + "14.Выписка из банка" + "\n" + "15.Страховка авто/человек" + "\n" +
-                            "Выберете необходимый пункт ⬇️ ", 666, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Доступные документы для просмотра информации:" + "\n" + "1.Приглашение воеводское" + "\n" + "2.Полугодовое приглашение" + "\n" + "3.Комплект документов на карту побыту" + "\n" + "4.Карта побыту рабочая(с внеском)" + "\n" + "5.Карта побыту рабочая(без внеска)" + "\n" + "6.Мельдунок" + "\n" + "7.Умовы найму" + "\n" + "8.Wstepne" + "\n" + "9.Cан-эпид" + "\n" + "10.Психотесты для водителей" + "\n" + "11.Orzeczenie для водителей" + "\n" + "12.Код 95" + "\n" + "13.Получение банковского кредита" + "\n" + "14.Выписка из банка" + "\n" + "15.Страховка авто/человек" + "\n" +
+                                    "Выберете необходимый пункт ⬇️ ", 666, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -497,7 +526,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Сотрудничество\uD83D\uDC64":
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете пункт для сотрудничиства\uD83D\uDD3D", 111, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Выберете пункт для сотрудничиства\uD83D\uDD3D", 111, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -505,138 +534,60 @@ public class Bot extends TelegramLongPollingBot {
                     case "🚸Навигатор Польша":
                         telUser.setAdmin_support(false);
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете город\uD83D\uDD3D", 222, update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Выберете город\uD83D\uDD3D", 222, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case "Варшава":
-                        try {
-                            sendApiMethod(send_Message_With_Remake("\uD83D\uDD3DВыберете необходимый пункт",12345,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
 
-                        }
-                        break;
-                    case "Работа":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Работа").getTextLink()
-                                    ,333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Обьявления":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Обьявление").getTextLink()
-                                    ,333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-
-                    case "Рынок":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Ринок").getTextLink()
-                                    ,333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Жилье":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Жилье").getTextLink()
-                                    ,333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Каталог услуг | Варшава":
-
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Каталог").getTextLink()
-                                    ,333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Вроцлав":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Вроцлав").getTextLink(),333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Краков":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Краков").getTextLink(),333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
-                    case "Познань":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Познань").getTextLink(),333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-
-                        }
-                        break;
 
                     case "\uD83C\uDF10Хочу в Европу | Работа | Учёба":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт",1710,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт", 1710, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "Учеба в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Учеба в Польше").getTextLink(),333,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Учебе"+ "@"+update.getMessage().getChat().getUserName()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Учеба в Польше").getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin).setText("Запрос по Учебе" + "@" + update.getMessage().getChat().getUserName()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "Работа в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете нужный пункт",23112000,update.getMessage().getChatId().toString()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе"+ "@"+update.getMessage().getChat().getUserName()+update.getMessage().getContact().getPhoneNumber()+update.getMessage().getChat().getInviteLink()));
+                            sendApiMethod(send_Message_With_Remake("Выберете нужный пункт", 23112000, update.getMessage().getChatId().toString(), new City()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе" + "@" + update.getMessage().getChat().getUserName() + update.getMessage().getContact().getPhoneNumber() + update.getMessage().getChat().getInviteLink()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "test":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Test",333,chatadmin));
+                            sendApiMethod(send_Message_With_Remake("Test", 333, chatadmin, new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "ℹ️ Сотрудничество | помощь":
                         try {
-                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт",2311,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake("Выберете необходимый пункт", 2311, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "Реклама в Польше":
                         try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Реклама в Польше").getTextLink(),333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Реклама в Польше").getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
                     case "Нужен Бот":
                         try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Нужен Бот").getTextLink(),333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Нужен Бот").getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -644,7 +595,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Вакансии":
                         try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Вакансии").getTextLink(),333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Вакансии").getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
 
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -652,60 +603,98 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     case "Связаться с Менеджером":
                         try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Связаться с Менеджером").getTextLink(),333,update.getMessage().getChatId().toString()));
+                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Связаться с Менеджером").getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
-                    case "Афиша Мероприятий":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Афиша").getTextLink(),333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case "Знакомства":
-                        try {
-                            sendApiMethod(send_Message_With_Remake(linkRepo.findByNameBut("Варшава_Знакомства").getTextLink(),333,update.getMessage().getChatId().toString()));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-                        break;
+
                     case "/showstat":
-                        Random random=new Random();
-                        int resqw= random.nextInt(55);
+                        Random random = new Random();
+                        int resqw = random.nextInt(55);
                         try {
-                            sendApiMethod(new SendMessage().setText("Количество пользователей: "+resqw).setChatId(update.getMessage().getChatId()));
+                            sendApiMethod(new SendMessage().setText("Количество пользователей: " + teluUserRepo.findAll()).setChatId(update.getMessage().getChatId()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         break;
-
-
 
 
                     default:
+                        for(Link link:linkRepo.findAll())
+                        {   try {
+
+
+                            System.out.println(link.getNameBut()+"----" +link.getCity());
+                        }catch (Exception e){}
+                        }
                         try {
-                            Integer rf=Integer.valueOf(update.getMessage().getText());
-                            Document doc=documentRepo.findByNumber(rf);
+                            Integer rf = Integer.valueOf(update.getMessage().getText());
+                            Document doc = documentRepo.findByNumber(rf);
 
                             try {
                                 try {
                                     execute(new SendPhoto()
                                             .setPhoto(
-                                                    new File("src/main/resources/photos/"+doc.getFoto()))
+                                                    new File("src/main/resources/photos/" + doc.getFoto()))
                                             .setChatId(update.getMessage().getChatId()));
-                                }catch (Exception r)
-                                {}
-                                sendApiMethod(send_Message_With_Remake(doc.getManual(),0000,update.getMessage().getChatId().toString()));
+                                } catch (Exception r) {
+                                }
+                                sendApiMethod(send_Message_With_Remake(doc.getManual(), 0000, update.getMessage().getChatId().toString(), new City()));
                                 execute(
-                                        new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText(doc.getList_need_document() ));
+                                        new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText(doc.getList_need_document()));
                                 execute(
-                                        new SendMessage().setChatId(chatadmin2).setText("Заказ по"+ doc.getName()+"@"+update.getMessage().getChat().getUserName()));
+                                        new SendMessage().setChatId(chatadmin2).setText("Заказ по" + doc.getName() + "@" + update.getMessage().getChat().getUserName()));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
-                        }catch (Exception e) { }
+                        } catch (Exception e) {
+                        }
+                        if (city != null){
+                            try {
+                            System.out.println(update.getMessage().getText());
+                            System.out.println(city.getName());
+                            List<Link> linkse = linkRepo.findAllByNameBut(update.getMessage().getText().trim());
+                            for (Link le : linkse) {
+                                System.out.println(le.getTextLink());
+                                System.out.println(le.getCity().getName());
+                                System.out.println(city.getName());
+                                if (le.getCity().getName().equals( city.getName())) {
+                                    System.out.println(le.getTextLink());
+                                    try {
+                                        sendApiMethod(send_Message_With_Remake(le.getTextLink(), 333, update.getMessage().getChatId().toString(), new City()));
+                                    } catch (TelegramApiException e) {
+                                        e.printStackTrace();
+
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                         }
+                        else {try {
+                                city = cityRepo.findByName(update.getMessage().getText());
+                                System.out.println(city.getName()+" 2222");
+                                String string = "";
+                                int counts = 1;
+                                for (Link link : linkRepo.findAllByCity(city)) {
+                                    string += counts + ") " + link.getNameBut() + "\n";
+                                    counts++;
+
+                                }
+                                try {
+                                    System.out.println(string);
+                                    sendApiMethod(send_Message_With_Remake(string, 1212, update.getMessage().getChatId().toString(), city));
+                                } catch (TelegramApiException e) {
+                                    e.printStackTrace();
+
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         if(update.getMessage().getChatId().toString().equals("427806944")){
                             for (String r:rassilka){
                                 try {
@@ -729,7 +718,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    public SendMessage send_Message_With_Remake(String text, int type, String chat_id){
+    public SendMessage send_Message_With_Remake(String text, int type, String chat_id, City city){
         System.out.println("in");
         ReplyKeyboardMarkup keyboard =new ReplyKeyboardMarkup();
         keyboard.setResizeKeyboard(true);
@@ -754,7 +743,22 @@ public class Bot extends TelegramLongPollingBot {
             rows.add(row4);
             //
         }
+        if (type==1212)
+        {
+            KeyboardRow row1=new KeyboardRow();
+            KeyboardRow row2=new KeyboardRow();
+            for (Link link:linkRepo.findAllByCity(city))
+            {   row1=new KeyboardRow();
+                row1.add(new KeyboardButton(link.getNameBut()));
+                rows.add(row1);
+            }
 
+
+
+
+            row2.add(new KeyboardButton("Вернуться  в главное меню↩️"));
+            rows.add(row2);
+        }
 
         if (type==5)
         {
@@ -802,11 +806,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if(type==333)
         {   KeyboardRow row1=new KeyboardRow();
-            KeyboardRow row2=new KeyboardRow();
-            KeyboardRow row3=new KeyboardRow();
             row1.add(new KeyboardButton("Вернуться  в главное меню↩️"));
-
-
             rows.add(row1);
 
         }
@@ -878,19 +878,13 @@ public class Bot extends TelegramLongPollingBot {
         }
         if(type == 222){
             KeyboardRow row1=new KeyboardRow();
-            KeyboardRow row2=new KeyboardRow();
-            KeyboardRow row3=new KeyboardRow();
-            KeyboardRow row4=new KeyboardRow();
+            for (City c:cityRepo.findAll()) {
+                row1=new KeyboardRow();
+                row1.add(new KeyboardButton(c.getName()));
+                rows.add(row1);
+            }
             KeyboardRow row5=new KeyboardRow();
-            row1.add(new KeyboardButton("Варшава"));
-            row2.add(new KeyboardButton("Вроцлав"));
-            row3.add(new KeyboardButton("Познань"));
-            row4.add(new KeyboardButton("Краков"));
             row5.add(new KeyboardButton("Вернуться  в главное меню↩️"));
-            rows.add(row1);
-            rows.add(row2);
-            rows.add(row3);
-            rows.add(row4);
             rows.add(row5);
 
 
@@ -1000,11 +994,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@warsaww_bot";///""@Documents_in_Poland_bot;@warsaww_bot
+        return "@Polled_bot";///""@Documents_in_Poland_bot;@warsaww_bot
     }
 
     @Override
     public String getBotToken() {
-        return "827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
+        return "851210991:AAEJhjujEK7z5e_SfmPevHeWLP0KiK0AHmA";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
     }
 }
