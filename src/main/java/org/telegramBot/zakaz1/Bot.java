@@ -335,7 +335,7 @@ public class Bot extends TelegramLongPollingBot {
                             e.printStackTrace();
                         }
                         try {
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя: " + "@" + update.getMessage().getChat().getUserName() + " \n " + telUser.getType_doc()+" документ---- "+ document));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя: " + "@" + update.getMessage().getChat().getUserName() + " \n " +" документ---- "+ document));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
