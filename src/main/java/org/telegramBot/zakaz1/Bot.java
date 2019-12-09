@@ -627,7 +627,27 @@ public class Bot extends TelegramLongPollingBot {
                             System.out.println(link.getNameBut()+"----" +link.getCity());
                         }catch (Exception e){}
                         }
+                        try {
+                            Integer rf = Integer.valueOf(update.getMessage().getText());
+                            Document doc = documentRepo.findByNumber(rf);
 
+                            try {
+                                try {
+                                    execute(new SendPhoto()
+                                            .setPhoto(
+                                                    new File("src/main/resources/photos/" + doc.getFoto()))
+                                            .setChatId(update.getMessage().getChatId()));
+                                } catch (Exception r) {
+                                }
+                                sendApiMethod(send_Message_With_Remake(doc.getManual(), 0000, update.getMessage().getChatId().toString(), new City()));
+                                execute(
+                                        new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText(doc.getList_need_document()));
+
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e) {
+                        }
                         if (city != null){
                             try {
                             System.out.println(update.getMessage().getText());
