@@ -10,6 +10,7 @@
         <module name="telebot_zakaz1" />
         <module name="telebotee" />
         <module name="telebotert" />
+        <module name="telebots" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,6 +20,7 @@
       <module name="telebot_zakaz1" options="-parameters" />
       <module name="telebotee" options="-parameters" />
       <module name="telebotert" options="-parameters" />
+      <module name="telebots" options="-parameters" />
     </option>
   </component>
 </project>

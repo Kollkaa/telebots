@@ -33,7 +33,7 @@ import java.util.*;
 public class Bot extends TelegramLongPollingBot {
     boolean add=true;
     String chatadmin="-361379869";
-    String chatadmin2="-365050746";
+    String chatadmin2="-1001221008721";
    boolean shutdown=false;
    boolean shut=false;
    boolean flag=false;
@@ -330,7 +330,6 @@ public class Bot extends TelegramLongPollingBot {
                     case "Заказать":
 
                         try {
-
                             sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + " В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(telUser.getChat_id()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
@@ -994,11 +993,15 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@warsaww_bot";///""@Documents_in_Poland_bot;@warsaww_bot
+        return "@Documents_in_Poland_bot";///""@Documents_in_Poland_bot;@warsaww_bot
     }
 
     @Override
     public String getBotToken() {
-        return "827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
+        return "808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo";// 808617170:AAF58eibRG7whQZkJAI3ounVnN__2TRbFEo||||||||||827804459:AAEhCYbx6DhbZDsoUroynFmqf2f57yDqzaw
     }
 }
+/*spring.datasource.url=jdbc:postgres://jirqnmhipwokvv:b6f9aac8ecd5857d748d640500fcb55398c5aa9f69fbb5a7291ca091e304c57a@ec2-176-34-183-20.eu-west-1.compute.amazonaws.com:5432/d8nf85oe66bc6d
+spring.datasource.username=jirqnmhipwokvv
+spring.datasource.password=b6f9aac8ecd5857d748d640500fcb55398c5aa9f69fbb5a7291ca091e304c57a
+* */
