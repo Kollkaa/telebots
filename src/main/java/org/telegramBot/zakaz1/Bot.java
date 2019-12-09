@@ -558,7 +558,7 @@ public class Bot extends TelegramLongPollingBot {
                     case "Работа в Польше":
                         try {
                             sendApiMethod(send_Message_With_Remake("Выберете нужный пункт", 23112000, update.getMessage().getChatId().toString(), new City()));
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе" + "@" + update.getMessage().getChat().getUserName() + update.getMessage().getContact().getPhoneNumber() + update.getMessage().getChat().getInviteLink()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Запрос по Работе: " + "@" + update.getMessage().getChat().getUserName() + update.getMessage().getContact().getPhoneNumber() + update.getMessage().getChat().getInviteLink()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -643,7 +643,7 @@ public class Bot extends TelegramLongPollingBot {
                                 execute(
                                         new SendMessage().setChatId(update.getMessage().getChatId().toString()).setText(doc.getList_need_document()));
                                 execute(
-                                        new SendMessage().setChatId(chatadmin2).setText("Заказ по" + doc.getName() + "@" + update.getMessage().getChat().getUserName()));
+                                        new SendMessage().setChatId(chatadmin2).setText("Заказ по" + doc.getName() + " @" + update.getMessage().getChat().getUserName()));
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
