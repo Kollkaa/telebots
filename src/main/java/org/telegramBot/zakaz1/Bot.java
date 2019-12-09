@@ -272,6 +272,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
         }
+        String document="";
     @Override
     public void onUpdateReceived(Update update) {
         System.out.println(documentRepo.findAll().size()+"  ______"+documentRepo.findAll().toArray().length);
@@ -328,14 +329,13 @@ public class Bot extends TelegramLongPollingBot {
                         shutdown = true;
                         break;
                     case "Заказать":
-
                         try {
                             sendApiMethod(new SendMessage().setText("Спасибо за форомление, ваш запрос отправлен администратору.\n" + " В скором времени мы свяжемся с вами\uD83D\uDE0A\n").setChatId(telUser.getChat_id()));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
                         try {
-                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя: " + "@" + update.getMessage().getChat().getUserName() + " \n " + telUser.getType_doc()));
+                            sendApiMethod(new SendMessage().setChatId(chatadmin2).setText("Заказ от пользователя: " + "@" + update.getMessage().getChat().getUserName() + " \n " + telUser.getType_doc()+" документ---- "+ document));
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
@@ -630,7 +630,7 @@ public class Bot extends TelegramLongPollingBot {
                         try {
                             Integer rf = Integer.valueOf(update.getMessage().getText());
                             Document doc = documentRepo.findByNumber(rf);
-
+                            document=doc.getName();
                             try {
                                 try {
                                     execute(new SendPhoto()
