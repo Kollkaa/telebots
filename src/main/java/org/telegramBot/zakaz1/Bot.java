@@ -306,7 +306,7 @@ public class Bot extends TelegramLongPollingBot {
             {
                 telUser=new TelUser(update.getMessage().getChatId().toString(),false);
                 try {
-                    telUser.setName(update.getMessage().getChat().getFirstName());
+                    telUser.setName(update.getMessage().getChat().getUserName());
                 }catch (Exception e)
                 {
                     telUser.setName(update.getMessage().getChat().getUserName());

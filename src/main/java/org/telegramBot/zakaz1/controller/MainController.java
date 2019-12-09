@@ -1,6 +1,7 @@
 package org.telegramBot.zakaz1.controller;
 
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegramBot.zakaz1.Bot;
 import org.telegramBot.zakaz1.domain.Message;
 import org.telegramBot.zakaz1.domain.TelUser;
@@ -71,15 +72,8 @@ public class MainController {
        for (TelUser ar:teluUserRepo.findAll()) {
            bot.SendMes(text,ar.getChat_id());
        }
-       /* for (TelUser us:userRepo.findAll())
-        {
-            if (us.isAdmin())
-            {
-                bot.execute(new SendMessage().setChatId(us.getChat_id()).setText(text));
-                System.out.println(us.getUsername());
-            }
-        }
-*/
+
+
 
         messageRepo.save(message);
 
